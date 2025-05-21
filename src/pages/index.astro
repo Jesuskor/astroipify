@@ -4,9 +4,8 @@ import ExampleComponent from '@/components/ExampleComponent.vue';
 import IplogComponent from '@/components/IplogComponent.vue';
 ---
 <Layout>
-	<div class="bg-neutral-50 text-neutral-800 h-svh flex flex-col items-center justify-center">
-		<p class="text-4xl font-semibold">Hola mundo</p>
-		<ExampleComponent client:load />
+	<div class="bg-neutral-950 text-neutral-200 h-svh flex flex-col items-center justify-center">
+		<p class="text-4xl font-semibold animate-pulse">Cargando...</p>
 		<IplogComponent client:load />
 	</div>
 </Layout>

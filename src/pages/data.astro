@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import TableComponent from '@/components/TableComponent.vue';
+---
+<Layout>
+	<div class="bg-neutral-50 text-neutral-800 h-svh flex flex-col items-center justify-center">
+		<p class="text-4xl font-semibold">Hola mundo</p>
+		<TableComponent client:load />
+	</div>
+</Layout>
