@@ -13,3 +13,15 @@ export async function getAllData(table: string) {
         return { error: error.message || 'Error al obtener datos' };
     }
 }
+
+export async function insertData(table: string, data: Record<string, any>) {
+    try {
+        // Solo toma los campos requeridos
+        const { ip, pais, region, ciudad, latitud, longitud, zona } = data;
+        const sql = `INSERT INTO ${table} (ip, pais, region, ciudad, latitud, longitud, zona) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        await turso.execute({ sql, args: [ip, pais, region, ciudad, latitud, longitud, zona] });
+        return { success: true };
+    } catch (error: any) {
+        return { error: error.message || 'Error al insertar datos' };
+    }
+}

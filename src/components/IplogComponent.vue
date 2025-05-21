@@ -6,6 +6,22 @@ const error = ref(null);
 
 onMounted(async () => {
   try {
+    // 1. Obtener IP pública
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const { ip } = await ipRes.json();
+
+    // 2. Obtener info de la IP
+    const infoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+    const info = await infoRes.json();
+
+    // 3. Guardar en la base de datos
+    await fetch('/api/iplog', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(info),
+    });
+
+    // 4. Obtener todos los datos para mostrar
     const res = await fetch('/api/iplog');
     const data = await res.json();
 
@@ -13,25 +29,38 @@ onMounted(async () => {
       error.value = data.error || 'Error desconocido';
     } else {
       rows.value = data;
-      console.log('Datos IP:', data);
     }
-  } catch (err) {
+  } catch (err: any) {
     error.value = err.message;
-    console.error('Error de red:', err);
   }
 });
 </script>
 
 <template>
-  <div class="text-center my-6 space-y-1">
-    <h1>IP Log Component</h1>
-    <p>IP Log Data:</p>
-    <ul>
-      <li v-if="error">{{ error }}</li>
-      <li v-else-if="rows.length === 0">No hay datos</li>
-      <li v-else v-for="(row, index) in rows" :key="index">
-        {{ row.ip }} - {{ row.pais }}
-      </li>
-    </ul>
+  <div>
+    <h1>IP Log</h1>
+    <div v-if="error" class="error">{{ error }}</div>
+    <table v-else>
+      <thead>
+        <tr>
+          <th>IP</th>
+          <th>Ciudad</th>
+          <th>Región</th>
+          <th>País</th>
+          <th>Organización</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="row in rows" :key="row.ip">
+          <td>{{ row.ip }}</td>
+          <td>{{ row.pais }}</td>
+          <td>{{ row.region }}</td>
+          <td>{{ row.ciudad }}</td>
+          <td>{{ row.latitud }}</td>
+          <td>{{ row.longitud }}</td>
+          <td>{{ row.zona }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
